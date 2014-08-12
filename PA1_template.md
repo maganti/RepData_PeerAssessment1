@@ -4,6 +4,7 @@ Setting the environment
 
 
 ```r
+#ensure that the data zip file has been copied and unzipped into the working #directory being set below, before you run this code
 knitr::opts_chunk$set(echo=TRUE)
 setwd("/Users/rameshmaganti/Desktop/coursera/data/RepData_PeerAssessment1")
 ```
@@ -18,6 +19,7 @@ library(ggplot2)
 
 
 ```r
+unzip("activity.zip")
 acts<-read.csv("activity.csv", stringsAsFactors=FALSE)
 acts$date<-as.Date(acts$date, format = '%Y-%m-%d')
 ```
@@ -31,7 +33,7 @@ acts2<-na.omit(acts)
 tot<-ddply(acts2, .(date), summarize, steps=sum(steps))
 # 1. Make a histogram of the total number of steps taken each day
 hist(tot$steps, col=3, main="Histogram of total number of steps per day", 
-     xlab="Total number of steps in a day")
+     xlab="Average of total number of steps in a day")
 ```
 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
@@ -74,7 +76,7 @@ maxStepsInterval
 ##     interval stepmean
 ## 104      835    206.2
 ```
-The 835 interval  has the maximum number of steps equal to  206.17
+The 835 interval  has the maximum number of steps equal to  206.2
 
 ## Imputing missing values
 
@@ -87,8 +89,10 @@ The total number of missing values in the original dataset are 2304
 ```r
 # 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 #   Using  mean to fill the missing value
-
 #3.Create a new dataset that is equal to the original dataset but with the missing data filled in.
+# using join from plyr package to ensure the order while merging the datasets
+#replacing all the NAs with the means computed in the earlier steps
+#Finally, creating the merged dataset with only the desired columns
 
 activity <- join(acts,tot2, by = "interval")
 nas<-is.na(activity$steps)
@@ -185,9 +189,16 @@ table(activity$daytype)
 tot3<-ddply(activity, .(interval, daytype), summarize, 
             stMean=mean(steps))
 ggplot(tot3, aes(x=interval, y=stMean)) + 
-        geom_line()+
+        xlab("Interval")+
+        ylab("Number of Steps")+
+        labs(title="Comparison of Average steps/day for Weekdays vs. Weekends")+
+        geom_line(color="blue")+
         facet_grid(daytype~.)+
-        facet_wrap(~daytype, nrow=2)
+        facet_wrap(~daytype, nrow=2)+
+        theme_bw()+
+        theme(strip.background = element_rect(fill = 'bisque1'))
 ```
 
 ![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
+
+For both day types, most activities seem to take place between 8:00 and 9:30 in the morning. The maximum average number of steps during weekdays is higher than that during the weekend, but on average there seem to be more activities during the weekend, especially between 10:00 AM and 8:00 PM.
