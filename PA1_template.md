@@ -83,16 +83,23 @@ The 835 interval  has the maximum number of steps equal to  206.2
 ```r
 #1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 missingVals<-length(which(is.na(acts)))
+missingVals
+```
+
+```
+## [1] 2304
 ```
 The total number of missing values in the original dataset are 2304
 
+Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
 ```r
-# 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
-#   Using  mean to fill the missing value
-#3.Create a new dataset that is equal to the original dataset but with the missing data filled in.
+#  Using  mean of steps averaged across all days, to fill the missing value
+
 # using join from plyr package to ensure the order while merging the datasets
+#fetching the indices of the NAs in the steps column
 #replacing all the NAs with the means computed in the earlier steps
-#Finally, creating the merged dataset with only the desired columns
+#Finally, creating the imputed dataset with only the desired columns
 
 activity <- join(acts,tot2, by = "interval")
 nas<-is.na(activity$steps)

@@ -260,16 +260,22 @@ maxStepsInterval
 
 <pre><code class="r">#1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 missingVals&lt;-length(which(is.na(acts)))
+missingVals
+</code></pre>
+
+<pre><code>## [1] 2304
 </code></pre>
 
 <p>The total number of missing values in the original dataset are 2304</p>
 
-<pre><code class="r"># 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
-#   Using  mean to fill the missing value
-#3.Create a new dataset that is equal to the original dataset but with the missing data filled in.
+<p>Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.</p>
+
+<pre><code class="r">#  Using  mean of steps averaged across all days, to fill the missing value
+
 # using join from plyr package to ensure the order while merging the datasets
+#fetching the indices of the NAs in the steps column
 #replacing all the NAs with the means computed in the earlier steps
-#Finally, creating the merged dataset with only the desired columns
+#Finally, creating the imputed dataset with only the desired columns
 
 activity &lt;- join(acts,tot2, by = &quot;interval&quot;)
 nas&lt;-is.na(activity$steps)
