@@ -4,7 +4,7 @@ Setting the environment
 
 
 ```r
-#ensure that the data zip file has been copied and unzipped into the working #directory being set below, before you run this code
+#ensure that the data zip file has been copied into the working directory being set below, before you run this code
 knitr::opts_chunk$set(echo=TRUE)
 setwd("/Users/rameshmaganti/Desktop/coursera/data/RepData_PeerAssessment1")
 ```
